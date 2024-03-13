@@ -1,6 +1,7 @@
 package com.patinfly
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,11 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.patinfly.ui.theme.PatinflyTheme
+import com.patinfly.presentaion.theme.PatinflyTheme
 
 class MainActivity : ComponentActivity() {
+   private val tag = MainActivity::class.java.simpleName
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(tag, "Before setContent Execution")
         setContent {
             PatinflyTheme {
                 // A surface container using the 'background' color from the theme
@@ -27,12 +30,38 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+    override fun onStart() {
+        super.onStart()
+        Log.e(tag, "On Start")
+
+    }
+    override fun onResume() {
+        super.onResume()
+        Log.e(tag, "On Resume")
+
+    }
+    override fun onStop() {
+        super.onStop()
+        Log.d(tag, "On Stop")
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e(tag, "On Destroy")
+
+    }
+    override fun onRestart() {
+        super.onRestart()
+        Log.d(tag, "On Restart")
+
+    }
+
 }
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello frm $name!",
+        text = "Hello from $name!",
         modifier = modifier
     )
 }
@@ -41,6 +70,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     PatinflyTheme {
-        Greeting("Android")
+        Greeting("Androd")
     }
 }

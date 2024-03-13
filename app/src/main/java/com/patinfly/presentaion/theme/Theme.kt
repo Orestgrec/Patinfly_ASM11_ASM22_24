@@ -1,4 +1,4 @@
-package com.patinfly.ui.theme
+package com.patinfly.presentaion.theme
 
 import android.app.Activity
 import android.os.Build
