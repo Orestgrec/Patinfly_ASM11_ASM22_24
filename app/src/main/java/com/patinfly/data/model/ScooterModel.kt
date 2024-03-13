@@ -2,6 +2,7 @@ package com.patinfly.data.model
 
 import java.util.Date
 import java.util.UUID
+// lastMaintenance must be a Date type not String
 
 data class ScooterModel(
     val uuid: UUID,
@@ -12,5 +13,5 @@ data class ScooterModel(
     var vacant: Boolean,
     var batteryLevel: Double,
     val batteryPartNumber: String,
-    var lastMaintenance: Date? = null
+    var lastMaintenance: String? = null
 )
