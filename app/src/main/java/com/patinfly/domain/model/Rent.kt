@@ -5,9 +5,9 @@ import java.util.Date
 import java.util.UUID
 
  data class Rent (
- val uuid:UUID,
- val scooterUUID:UUID,
- var userUUID:UUID,
- var startDate:Date,
- var stopDate:Date,
+  val uuid: UUID,
+  val scooterUUID: UUID,
+  val userUUID: UUID,
+  var startDate: String,
+  var stopDate: String
  )
