@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.patinfly.ui.theme.LoginActivity
+import com.patinfly.ui.theme.ui.theme.LoginActivity
 import com.patinfly.ui.theme.PatinflyTheme
 
 class RegisterActivity : ComponentActivity() {

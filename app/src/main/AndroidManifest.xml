@@ -18,7 +18,7 @@
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.Patinfly" />
         <activity
-            android:name=".ui.theme.LoginActivity"
+            android:name=".ui.theme.ui.theme.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.Patinfly">

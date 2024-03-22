@@ -5,7 +5,9 @@ import java.util.Date
 import java.util.UUID
 // lastMaintenance must be a Date type not String
 
+
 data class ScooterModel(
+
     @SerializedName("uuid") val uuid: UUID,
     @SerializedName("model") val model: String,
     @SerializedName("serial_number") val serialNumber: String,

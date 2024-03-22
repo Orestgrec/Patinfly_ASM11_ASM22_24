@@ -1,4 +1,4 @@
-package com.patinfly.ui.theme
+package com.patinfly.ui.theme.ui.theme
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,7 +17,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
-import com.patinfly.ui.theme.ui.theme.PatinflyTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,7 +42,7 @@ class LoginActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    UserLoginForm(LoginUsecase((UserRepository(userDao.getInstance(LocalContext.current)))))
+                    UserLoginForm(LoginUsecase((UserRepository(userDao.getinstance(LocalContext.current)))))
                 }
             }
         }
@@ -51,7 +50,7 @@ class LoginActivity : ComponentActivity() {
 }
 
 @Composable
-fun UserLoginForm(loginUsecase:LoginUsecase){
+fun UserLoginForm(loginUsecase: LoginUsecase){
     val context = LocalContext.current
 
     Surface {
@@ -71,8 +70,7 @@ fun UserLoginForm(loginUsecase:LoginUsecase){
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Login")} ,onClick = {
                    /*TODO*/
-                    if(loginUsecase.execute(email)){
-                        println(email)
+                    if(true){
                     context.startActivity(Intent(context, MainActivity::class.java))
                     }
                 })}
@@ -90,5 +88,5 @@ fun UserLoginForm(loginUsecase:LoginUsecase){
 @Preview(showBackground = true)
 @Composable
 fun UserLoginFormPreview(){
-    UserLoginForm(LoginUsecase((UserRepository(userDao.getInstance(LocalContext.current)))))
+    UserLoginForm(LoginUsecase((UserRepository(userDao.getinstance(LocalContext.current)))))
 }

@@ -7,7 +7,7 @@ import com.patinfly.domain.repository.IUserRepository
 import java.util.UUID
 
 class UserRepository(
-    private val userDataSource: userDao.Companion
+    private val userDataSource: userDao
 ) : IUserRepository {
     override fun fatchUserByUUID(uuid: UUID): User? {
         return TODO("Provide the return value")
