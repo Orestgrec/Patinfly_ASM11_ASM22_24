@@ -2,6 +2,7 @@ package com.patinfly.ui.theme.ui.theme
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -26,15 +27,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.gson.Gson
 import com.patinfly.MainActivity
 import com.patinfly.RegisterActivity
 import com.patinfly.data.dataSource.user.userDao
+import com.patinfly.data.model.UserModel
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.usecase.LoginUsecase
+import com.patinfly.utils.ReadJSONFromAssets
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity :ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        /*
+        val gson =Gson()
+        val jsonString= ReadJSONFromAssets(baseContext,"user.json")
+        val data = gson.fromJson(jsonString,UserModel::class.java)
+*/
+
         setContent {
             PatinflyTheme {
                 // A surface container using the 'background' color from the theme

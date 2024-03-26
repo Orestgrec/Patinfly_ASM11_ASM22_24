@@ -1,0 +1,11 @@
+{
+  "uuid": "98b39d25-49a5-4bfb-b9ff-7e884f308ae3",
+  "model": "ScooterX",
+  "serialNumber": "123456789",
+  "longitude": 45.6789,
+  "latitude": 12.3456,
+  "vacant": true,
+  "batteryLevel": 80.5,
+  "batteryPartNumber": "ABC123",
+  "lastMaintenance": "2024-03-10T08:00:00Z"
+}
