@@ -34,6 +34,7 @@ import com.patinfly.data.dataSource.user.userDao
 import com.patinfly.data.model.UserModel
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.usecase.LoginUsecase
+import com.patinfly.profileActivity
 import com.patinfly.utils.ReadJSONFromAssets
 
 class LoginActivity :ComponentActivity() {
@@ -81,7 +82,7 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Login")} ,onClick = {
                    /*TODO*/
                     if(true){
-                    context.startActivity(Intent(context, MainActivity::class.java))
+                    context.startActivity(Intent(context, profileActivity::class.java))
                     }
                 })}
             Row{
