@@ -2,61 +2,29 @@ package com.patinfly.data.dataSource.user
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.loader.AssetsProvider
-import androidx.compose.ui.text.input.TextFieldValue
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonSyntaxException
 import com.patinfly.data.model.UserModel
 import com.patinfly.domain.model.User
-import com.patinfly.utils.ReadJSONFromAssets
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
+import org.json.JSONArray
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.UUID
 
-class userDao constructor(
+class UserDao constructor(
 ) {
     private var context: Context? = null
-    fun loadUserData() {
-        context?.let {
-            val stringDataFromRawAsset: String= ReadJSONFromAssets(context!!,"user.json")
-            stringDataFromRawAsset.let {
-                val user: UserModel? = parseJson(it)
-                user?.let {
-                    this.saveUser(user)
-                }
-            }
-        }
+    private var data:JSONArray?=null
 
-
-    }
-
-    /*val jsonFilePath = "../../../src/main/res/raw/user.json"
-
-            // Read the JSON file content
-            val jsonContent = File(jsonFilePath).readText()
-
-            // Create Gson instance
-            val gson = Gson()
-
-            // Parse JSON string to a Map
-            val jsonObject = gson.fromJson(jsonContent, Map::class.java)
-
-            // Extract the email field
-            val emailJson  = jsonObject["email"]
-        */
     companion object {
         @SuppressLint("StaticFieldLeak")
         @Volatile
-        private var instance: userDao? = null
-        fun getinstance(context: Context) =
+        private var instance: UserDao? = null
+        fun getInstance(context: Context, data: JSONArray?) =
             instance ?: synchronized(this)
             {
-                instance ?: userDao().also {
+                instance ?: UserDao().also {
                     instance = it
                     it.context =context
-                    it.loadUserData()
+                    it.data = data
                 }
             }
 
@@ -64,20 +32,60 @@ class userDao constructor(
         private val usersMailMap: MutableMap<String, UserModel> = HashMap()
 
 
-        private fun parseJson(json: String): UserModel? {
-        val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create()
-            return try {
-                gson.fromJson(json,UserModel::class.java)
-            }catch (e:JsonSyntaxException){
-                e.printStackTrace()
-                null
-            }            }
+      }
+    fun fatchUserByEmail(interedEmail: String?):UserModel? {
+        val max = data?.length()
+        for (i in 0..max!!) {
+            val email = data?.getJSONObject(i)?.getString("email")
+            if (email==interedEmail) {
+
+                val userName: String? = data?.getJSONObject(i)?.getString("username")
+
+                // the data coming from json is always String so we have to convert it to the desired data type before get our instance from the data class
+                val uuid: String? = data?.getJSONObject(i)?.getString("uuid")
+                val uuidConverted: UUID = UUID.fromString(uuid)
+
+                val email: String? = data?.getJSONObject(i)?.getString("email")
+                val isRenting: Boolean? = data?.getJSONObject(i)?.getString("isRenting")?.toBoolean()
+
+                // the data coming from json is always String so we have to convert it to the desired data type before get our instance from the data class
+                val scooterRented: String? = data?.getJSONObject(i)?.getString("scooterRented")
+                val scooterRentedConverted: UUID = UUID.fromString(scooterRented)
+
+                // the data coming from json is always String so we have to convert it to the desired data type before get our instance from the data class
+                val creationDate: String? = data?.getJSONObject(i)?.getString("creationDate")
+                val dateFormatter =DateTimeFormatter.ISO_LOCAL_DATE_TIME
+                val localDateTime: LocalDateTime? = LocalDateTime.parse(creationDate, dateFormatter)
+
+
+                val numberOfRents: Int? =
+                    data?.getJSONObject(i)?.getString("numberOfRents")?.toInt()
+
+                return UserModel(
+                    username = userName,
+                    scooterRented = scooterRentedConverted,
+                    email = email,
+                    creationDate = localDateTime,
+                    uuid = uuidConverted,
+                    isRenting = isRenting,
+                    numberOfRents = numberOfRents
+                )
+
+            }
         }
-    fun fatchUserByUUID(uuid: UUID): User? {
-        return TODO("Provide the return value")
+        return null
+
     }
-    fun checkUserByEmail(email: TextFieldValue): User? {
-        return TODO("Provide the return value")
+
+    fun checkUserByEmail(interedEmail: String): String {
+        val max = data?.length()
+        for (i in 0..max!!) {
+            val email = data?.getJSONObject(i)?.getString("email")
+            if (email==interedEmail){
+                return "user approved"
+            }
+        }
+            return "wrong credentials"
     }
 
     private fun saveUser(user: UserModel) {

@@ -1,9 +1,29 @@
-{
-  "uuid": "a1b2c3d4-e5f6-7g8h-9i0j-1k2l3m4n5o6p",
+[{
+  "uuid": "47a52038-34f0-4929-ad47-cc4a7f4898c6",
   "username": "john_doe",
   "email": "john.doe@example.com",
   "isRenting": true,
-  "scooterRented": "98b39d25-49a5-4bfb-b9ff-7e884f308ae3",
-  "creationDate": "2024-03-13T08:00:00",
+  "scooterRented": "98b39d25-49a5-4bfb-49a5-7e884f308ae3",
+  "creationDate": "2023-09-13T08:00:00",
   "numberOfRents": 5
-}
+},
+  {
+    "uuid": "b97be67e-f096-4475-9b55-da4fee1d9339",
+    "username": "samuel_doe",
+    "email": "samuel.doe@example.com",
+    "isRenting": true,
+    "scooterRented": "98b39d25-49a5-4bfb-49a5-7e884f308ae3",
+    "creationDate": "2023-02-13T08:00:00",
+    "numberOfRents": 5
+  },
+  {
+    "uuid": "e2bc6fd5-1075-4198-adb8-6a24e07a91d9",
+    "username": "garcia_doe",
+    "email": "garcia.doe@example.com",
+    "isRenting": true,
+    "scooterRented": "98b39d25-49a5-4bfb-49a5-7e884f308ae3",
+    "creationDate": "2020-08-13T08:00:00",
+    "numberOfRents": 5
+  }
+
+]

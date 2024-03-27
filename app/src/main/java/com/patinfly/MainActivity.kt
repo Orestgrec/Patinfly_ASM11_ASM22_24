@@ -18,7 +18,6 @@ import com.patinfly.domain.model.Rent
 import com.patinfly.domain.model.Scooter
 import com.patinfly.domain.model.User
 import com.patinfly.presentaion.theme.PatinflyTheme
-import com.patinfly.utils.ReadJSONFromAssets
 import java.time.LocalDateTime
 import java.util.UUID
 

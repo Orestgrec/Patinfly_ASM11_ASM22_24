@@ -2,6 +2,7 @@ package com.patinfly.ui.theme.ui.theme
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.JsonReader
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,14 +28,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.google.gson.Gson
 import com.patinfly.MainActivity
+import com.patinfly.ProfileActivity
 import com.patinfly.RegisterActivity
-import com.patinfly.data.dataSource.user.userDao
+import com.patinfly.data.dataSource.user.UserDao
 import com.patinfly.data.model.UserModel
+
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.usecase.LoginUsecase
-import com.patinfly.utils.ReadJSONFromAssets
+import org.json.JSONArray
+import java.io.InputStream
+import java.nio.charset.StandardCharsets
 
 class LoginActivity :ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +48,6 @@ class LoginActivity :ComponentActivity() {
         val jsonString= ReadJSONFromAssets(baseContext,"user.json")
         val data = gson.fromJson(jsonString,UserModel::class.java)
 */
-
         setContent {
             PatinflyTheme {
                 // A surface container using the 'background' color from the theme
@@ -52,11 +55,31 @@ class LoginActivity :ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    UserLoginForm(LoginUsecase((UserRepository(userDao.getinstance(LocalContext.current)))))
+                    UserLoginForm(LoginUsecase((UserRepository(UserDao.getInstance(LocalContext.current,loadJson())))))
                 }
             }
         }
     }
+
+private fun loadJson():JSONArray?{
+   return try {
+    val inputStream:InputStream= assets.open("user.json")
+        val size:Int=inputStream.available()
+        val buffer: ByteArray = ByteArray(size)
+        inputStream.read(buffer)
+        inputStream.close()
+
+
+        val json = String(buffer, StandardCharsets.UTF_8)
+        val jsonArray = JSONArray(json)
+
+       jsonArray
+    }catch (error:Exception){
+        Log.e("TAG","loadJson: error")
+        null
+    }
+ }
+
 }
 
 @Composable
@@ -79,10 +102,20 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
             }
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Login")} ,onClick = {
-                   /*TODO*/
-                    if(true){
-                    context.startActivity(Intent(context, MainActivity::class.java))
-                    }
+                        try {
+                        Log.e("TAG check","the check result ${loginUsecase.execute(email)}")
+                        val check =loginUsecase.execute(email)
+                        if (check=="user approved"){
+                            // send data
+                            val intent = Intent(context, ProfileActivity::class.java)
+                            intent.putExtra("email",email.text)
+                            context.startActivity(intent)
+                            //context.startActivity(Intent(context, ProfileActivity::class.java))
+                        }
+                        }catch (error:Exception){
+                            Log.e("TAG check error","there is error dude")
+                        }
+
                 })}
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Register")} ,onClick = {
@@ -98,5 +131,6 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
 @Preview(showBackground = true)
 @Composable
 fun UserLoginFormPreview(){
-    UserLoginForm(LoginUsecase((UserRepository(userDao.getinstance(LocalContext.current)))))
+    val jsonArray:JSONArray?=null
+    UserLoginForm(LoginUsecase((UserRepository(UserDao.getInstance(LocalContext.current,jsonArray)))))
 }

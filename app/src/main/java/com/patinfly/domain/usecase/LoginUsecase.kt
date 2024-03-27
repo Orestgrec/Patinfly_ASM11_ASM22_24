@@ -5,20 +5,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.patinfly.data.repository.UserRepository
 
 class LoginUsecase(private var userRepository: UserRepository) {
-fun execute(email: TextFieldValue ):Boolean{
+fun execute(email: TextFieldValue ):String?{
     return try {
-        val userUUID = userRepository.checkUserByEmail(email)
-        userUUID?.let {
-            // user fetched
-            true
-        }?:{
-            // user not found
-            false
-        }
-        true
+        userRepository.checkUserByEmail(email.text)
     }catch (error:Exception) {
         Log.e("LoginUsecase","Error in login process")
-        false
+        "fail"
     }
 }
 }
