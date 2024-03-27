@@ -33,7 +33,7 @@ import org.json.JSONArray
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
-class ProfileActivity : ComponentActivity() {
+class profileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val email:String? = intent.getStringExtra("email")
