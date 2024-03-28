@@ -29,10 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.patinfly.data.dataSource.user.UserDao
 import com.patinfly.data.repository.UserRepository
-import com.patinfly.domain.usecase.LoginUsecase
-import com.patinfly.domain.usecase.ProfileDataUsecase
 import com.patinfly.domain.usecase.RegisterUsecase
-import com.patinfly.ui.theme.ui.theme.LoginActivity
 import com.patinfly.ui.theme.PatinflyTheme
 import org.json.JSONArray
 import java.io.InputStream
@@ -50,17 +47,17 @@ class RegisterActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    UserLoginForm(RegisterUsecase((UserRepository(UserDao.getInstance(LocalContext.current,loadJson())))))
+                    UserRegisterForm(RegisterUsecase((UserRepository(UserDao.getInstance(LocalContext.current,loadJson())))))
                 }
             }
         }
     }
-    // load data from json and return json Array
+    // load data from json file in assets and return json Array
     private fun loadJson(): JSONArray?{
         return try {
             val inputStream: InputStream = assets.open("user.json")
             val size:Int=inputStream.available()
-            val buffer: ByteArray = ByteArray(size)
+            val buffer = ByteArray(size)
             inputStream.read(buffer)
             inputStream.close()
 
@@ -75,7 +72,7 @@ class RegisterActivity : ComponentActivity() {
     }
 }
 @Composable
-fun UserLoginForm(registerUsecase: RegisterUsecase){
+fun UserRegisterForm(registerUsecase: RegisterUsecase){
     val context = LocalContext.current
 
     Surface {
@@ -85,10 +82,10 @@ fun UserLoginForm(registerUsecase: RegisterUsecase){
             var userName by remember {
                 mutableStateOf(TextFieldValue("")) }
             Row (modifier = Modifier.padding(vertical = 8.dp)){
-                TextField(value = userName, label = { Text(text="userName") } , onValueChange ={ userName= it}, )
+                TextField(value = userName, label = { Text(text="user name") } , onValueChange ={ userName= it} )
             }
             Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                TextField(value = email, label = { Text(text="email") } , onValueChange ={email= it}, )
+                TextField(value = email, label = { Text(text="email") } , onValueChange ={email= it} )
             }
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Sign Up")} ,onClick = {
@@ -117,7 +114,7 @@ fun UserLoginForm(registerUsecase: RegisterUsecase){
 
 @Preview(showBackground = true)
 @Composable
-fun UserLoginFormPreview(){
+fun UserRegisterFormPreview(){
     val jsonArray:JSONArray?=null
-    UserLoginForm(RegisterUsecase((UserRepository(UserDao.getInstance(LocalContext.current,jsonArray)))))
+    UserRegisterForm(RegisterUsecase((UserRepository(UserDao.getInstance(LocalContext.current,jsonArray)))))
 }

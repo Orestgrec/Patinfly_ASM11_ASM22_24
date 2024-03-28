@@ -1,8 +1,7 @@
-package com.patinfly.ui.theme.ui.theme
+package com.patinfly
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.JsonReader
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,14 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.patinfly.MainActivity
-import com.patinfly.ProfileActivity
-import com.patinfly.RegisterActivity
 import com.patinfly.data.dataSource.user.UserDao
-import com.patinfly.data.model.UserModel
 
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.usecase.LoginUsecase
+import com.patinfly.ui.theme.ui.theme.PatinflyTheme
 import org.json.JSONArray
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -57,12 +53,12 @@ class LoginActivity :ComponentActivity() {
         }
     }
 
-    // load data from json and return json Array
+    // load data from json file in assets and return json Array
 private fun loadJson():JSONArray?{
    return try {
     val inputStream:InputStream= assets.open("user.json")
         val size:Int=inputStream.available()
-        val buffer: ByteArray = ByteArray(size)
+        val buffer = ByteArray(size)
         inputStream.read(buffer)
         inputStream.close()
 

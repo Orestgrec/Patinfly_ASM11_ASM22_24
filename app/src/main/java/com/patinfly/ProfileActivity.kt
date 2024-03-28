@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,7 +31,6 @@ import androidx.compose.ui.platform.LocalContext
 import com.patinfly.data.dataSource.user.UserDao
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.usecase.ProfileDataUsecase
-import com.patinfly.ui.theme.ui.theme.LoginActivity
 import org.json.JSONArray
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -56,7 +54,7 @@ class ProfileActivity : ComponentActivity() {
 
     }
 
-    // load data from json and return json Array
+    // load data from json file in assets and return json Array
     private fun loadJson(): JSONArray?{
         return try {
             val inputStream: InputStream = assets.open("user.json")
