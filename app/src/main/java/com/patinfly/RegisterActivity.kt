@@ -26,10 +26,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.patinfly.data.repository.UserRepository
 import com.patinfly.ui.theme.ui.theme.LoginActivity
 import com.patinfly.ui.theme.PatinflyTheme
 
 class RegisterActivity : ComponentActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -62,7 +65,10 @@ fun UserLoginForm(){
                 TextField(value = email, label = { Text(text="email") } , onValueChange ={email= it}, )
             }
             Row{
-                Button(modifier = Modifier.width(200.dp),content ={Text(text="Sign Up")} ,onClick = { /*TODO*/ })
+                Button(modifier = Modifier.width(200.dp),content ={Text(text="Sign Up")} ,onClick = {
+                    val userRepository = UserRepository
+                    userRepository.addUser(userName.text, email.text)
+                })
             }
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Login")} ,onClick = {
