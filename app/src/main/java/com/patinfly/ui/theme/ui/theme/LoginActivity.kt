@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,11 +44,6 @@ import java.nio.charset.StandardCharsets
 class LoginActivity :ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*
-        val gson =Gson()
-        val jsonString= ReadJSONFromAssets(baseContext,"user.json")
-        val data = gson.fromJson(jsonString,UserModel::class.java)
-*/
         setContent {
             PatinflyTheme {
                 // A surface container using the 'background' color from the theme
@@ -61,6 +57,7 @@ class LoginActivity :ComponentActivity() {
         }
     }
 
+    // load data from json and return json Array
 private fun loadJson():JSONArray?{
    return try {
     val inputStream:InputStream= assets.open("user.json")
@@ -92,6 +89,9 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
                 mutableStateOf(TextFieldValue("")) }
             var password by remember {
                 mutableStateOf(TextFieldValue("")) }
+
+            var error by rememberSaveable { mutableStateOf(String())}
+
             Row(modifier = Modifier.padding(vertical = 8.dp)) {
                 TextField(value = email, label = { Text(text="email") } , onValueChange ={email= it}, )
             }
@@ -106,24 +106,36 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
                         Log.e("TAG check","the check result ${loginUsecase.execute(email)}")
                         val check =loginUsecase.execute(email)
                         if (check=="user approved"){
-                            // send data
+                            // send email to Profile Activity so we can fetch its Info
                             val intent = Intent(context, ProfileActivity::class.java)
                             intent.putExtra("email",email.text)
                             context.startActivity(intent)
-                            //context.startActivity(Intent(context, ProfileActivity::class.java))
+                        }else{
+                            // in case of Wrong email we show an error text
+                            error="Wrong Credentials"
                         }
                         }catch (error:Exception){
-                            Log.e("TAG check error","there is error dude")
+                            Log.e("TAG check error","Wrong Credentials")
                         }
 
                 })}
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Register")} ,onClick = {
+                    // navigate to Login Activity
                     context.startActivity(Intent(context, RegisterActivity::class.java))
                 })
             }
+
+            // implement error text just in case of Wrong email
+            if (error.isNotEmpty()){
+            Row{
+                Text(text = error, modifier = Modifier.width(150.dp))
+                }
+            }
+            }
+
         }
-    }
+
 }
 
 

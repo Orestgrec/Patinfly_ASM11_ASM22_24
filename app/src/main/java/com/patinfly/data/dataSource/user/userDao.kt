@@ -3,7 +3,6 @@ package com.patinfly.data.dataSource.user
 import android.annotation.SuppressLint
 import android.content.Context
 import com.patinfly.data.model.UserModel
-import com.patinfly.domain.model.User
 import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,14 +23,10 @@ class UserDao constructor(
                 instance ?: UserDao().also {
                     instance = it
                     it.context =context
+                    // assign coming data from Activity to data property
                     it.data = data
                 }
             }
-
-        private val usersUUIDMap: MutableMap<UUID, UserModel> = HashMap()
-        private val usersMailMap: MutableMap<String, UserModel> = HashMap()
-
-
       }
     fun fatchUserByEmail(interedEmail: String?):UserModel? {
         val max = data?.length()
@@ -87,14 +82,5 @@ class UserDao constructor(
         }
             return "wrong credentials"
     }
-
-    private fun saveUser(user: UserModel) {
-        return TODO("Provide the return value")
-    }
-
-    fun updateUser(user: User) {
-        return TODO("Provide the return value")
-    }
-
 
 }

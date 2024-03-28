@@ -1,9 +1,11 @@
 package com.patinfly
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.patinfly.data.dataSource.user.UserDao
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.usecase.ProfileDataUsecase
+import com.patinfly.ui.theme.ui.theme.LoginActivity
 import org.json.JSONArray
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -52,6 +56,7 @@ class ProfileActivity : ComponentActivity() {
 
     }
 
+    // load data from json and return json Array
     private fun loadJson(): JSONArray?{
         return try {
             val inputStream: InputStream = assets.open("user.json")
@@ -84,8 +89,8 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
     val creationDate by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.creationDate.toString()) }
     val numberOfRents by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.numberOfRents.toString()) }
 
-    // receive data
-    Log.e("profileTag","the wanted test email is ${profileDataUsecase.execute(loginEmail)}")
+    val context = LocalContext.current
+
 
     Surface {
         Column(modifier = Modifier
@@ -101,11 +106,13 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 .padding(start = 4.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(text = "uuid", modifier = Modifier.width(100.dp))
+                Text(text = "uuid", modifier = Modifier.width(150.dp))
                 TextField(
                     value = uuid,
                     onValueChange = {},
-                    readOnly = true
+                    readOnly = true,
+                    modifier = Modifier.width(250.dp)
+
                 )
             }
             Row (modifier = Modifier
@@ -113,12 +120,13 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 .padding(start = 4.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(text = "username", modifier = Modifier.width(100.dp))
+                Text(text = "username", modifier = Modifier.width(150.dp))
                 username?.let { 
                     TextField(
                         value = it,
                         onValueChange = {},
-                        readOnly = true
+                        readOnly = true,
+                        modifier = Modifier.width(250.dp)
 
                     )
                 }
@@ -128,12 +136,13 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 .padding(start = 4.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(text = "email", modifier = Modifier.width(100.dp))
+                Text(text = "email", modifier = Modifier.width(150.dp))
                 email?.let {
                     TextField(
                         value = it,
                         onValueChange = {},
-                        readOnly = true
+                        readOnly = true,
+                        modifier = Modifier.width(250.dp)
 
                     )
                 }
@@ -143,11 +152,13 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 .padding(start = 4.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(text = "isRenting", modifier = Modifier.width(100.dp))
+                Text(text = "isRenting", modifier = Modifier.width(150.dp))
                 TextField(
                     value = isRenting,
                     onValueChange = {},
-                    readOnly = true
+                    readOnly = true,
+                    modifier = Modifier.width(250.dp)
+
                 )
             }
             Row (modifier = Modifier
@@ -155,11 +166,12 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 .padding(start = 4.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(text = "scooterRented", modifier = Modifier.width(100.dp))
+                Text(text = "scooterRented", modifier = Modifier.width(150.dp))
                 TextField(
                     value = scooterRented,
                     onValueChange = {},
-                    readOnly = true
+                    readOnly = true,
+                    modifier = Modifier.width(250.dp)
 
                 )
             }
@@ -168,11 +180,12 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 .padding(start = 4.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(text = "creationDate", modifier = Modifier.width(100.dp))
+                Text(text = "creationDate", modifier = Modifier.width(150.dp))
                 TextField(
                     value = creationDate,
                     onValueChange = {},
-                    readOnly = true
+                    readOnly = true ,
+                    modifier = Modifier.width(250.dp)
 
                 )
             }
@@ -181,13 +194,23 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 .padding(start = 4.dp, end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Text(text = "numberOfRents", modifier = Modifier.width(100.dp))
+                Text(text = "numberOfRents", modifier = Modifier.width(150.dp))
                 TextField(
                     value = numberOfRents,
                     onValueChange = {},
-                    readOnly = true
-
+                    readOnly = true ,
+                    modifier = Modifier.width(250.dp)
                 )
+            }
+            Row (
+
+            ){
+                Button( modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 30.dp, end = 30.dp).padding(vertical = 30.dp),content ={Text(text="Go Back")} ,onClick = {
+                    // navigate to login Activity
+                    context.startActivity(Intent(context, LoginActivity::class.java))
+                })
             }
         }
     }
