@@ -10,7 +10,8 @@ class ScooterRepository(
     private val scooterDataSource: ScooterDao
 ) : IScooterRepository {
     override fun fetchScooters(): List<Scooter> {
-        TODO("Not yet implemented")
+        return scooterDataSource.fetchScooters()
+        //implementa in ScooterDao e poi richiamala qui come fatto in userDao e IUserRepository
     }
 
     override fun fetchSchooterByUUID(uuid: UUID): Scooter? {
