@@ -27,8 +27,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.patinfly.data.dataSource.user.UserDao
+import com.patinfly.data.dataSource.dbDataSource.AppDatabase
+import com.patinfly.data.dataSource.user.UserDataSource
 import com.patinfly.data.repository.UserRepository
+import com.patinfly.domain.usecase.LoginUsecase
 import com.patinfly.domain.usecase.RegisterUsecase
 import com.patinfly.ui.theme.PatinflyTheme
 import org.json.JSONArray
@@ -47,7 +49,9 @@ class RegisterActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    UserRegisterForm(RegisterUsecase((UserRepository(UserDao.getInstance(LocalContext.current,loadJson())))))
+                    UserRegisterForm(RegisterUsecase((UserRepository(UserDataSource.getInstance(LocalContext.current),AppDatabase.getDatabase(LocalContext.current).userDataSource(),AppDatabase.getDatabase(LocalContext.current).scooterDataSource())))                    )
+
+
                 }
             }
         }
@@ -72,7 +76,7 @@ class RegisterActivity : ComponentActivity() {
     }
 }
 @Composable
-fun UserRegisterForm(registerUsecase: RegisterUsecase){
+ fun UserRegisterForm(registerUsecase: RegisterUsecase){
     val context = LocalContext.current
 
     Surface {
@@ -116,5 +120,6 @@ fun UserRegisterForm(registerUsecase: RegisterUsecase){
 @Composable
 fun UserRegisterFormPreview(){
     val jsonArray:JSONArray?=null
-    UserRegisterForm(RegisterUsecase((UserRepository(UserDao.getInstance(LocalContext.current,jsonArray)))))
+    UserRegisterForm(RegisterUsecase((UserRepository(UserDataSource.getInstance(LocalContext.current),AppDatabase.getDatabase(LocalContext.current).userDataSource(),AppDatabase.getDatabase(LocalContext.current).scooterDataSource())))                    )
+
 }

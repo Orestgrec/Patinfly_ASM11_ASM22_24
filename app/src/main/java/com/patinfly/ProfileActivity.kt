@@ -28,9 +28,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
-import com.patinfly.data.dataSource.user.UserDao
+import com.patinfly.data.dataSource.dbDataSource.AppDatabase
+import com.patinfly.data.dataSource.user.UserDataSource
 import com.patinfly.data.repository.UserRepository
+import com.patinfly.domain.model.dbDatasource.UserEntity
 import com.patinfly.domain.usecase.ProfileDataUsecase
+import com.patinfly.presentation.rentList.RentListActivity
+import com.patinfly.presentation.scooterList.ScooterListActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -38,7 +46,7 @@ import java.nio.charset.StandardCharsets
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val email:String? = intent.getStringExtra("email")
+        val email: String? = intent.getStringExtra("email")
 
         setContent {
             PatinflyTheme {
@@ -47,7 +55,14 @@ class ProfileActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ){
-                        ProfileScreen(email,ProfileDataUsecase((UserRepository(UserDao.getInstance(LocalContext.current,loadJson())))))
+//                    ProfileScreen(email,
+//                        ProfileDataUsecase((UserRepository(
+//                        UserDataSource.getInstance(LocalContext.current, AppDatabase.getDatabase(
+//                            LocalContext.current).userDataSource()))))
+
+                                ProfileScreen(email,ProfileDataUsecase((UserRepository(UserDataSource.getInstance(LocalContext.current),AppDatabase.getDatabase(LocalContext.current).userDataSource(),AppDatabase.getDatabase(LocalContext.current).scooterDataSource())))                    )
+
+
                 }
             }
         }
@@ -79,13 +94,35 @@ class ProfileActivity : ComponentActivity() {
 
 @Composable
 fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
-    val uuid by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.uuid.toString()) }
-    val username by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.username) }
-    val email by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.email) }
-    val isRenting by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.isRenting.toString()) }
-    val scooterRented by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.scooterRented.toString()) }
-    val creationDate by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.creationDate.toString()) }
-    val numberOfRents by rememberSaveable { mutableStateOf(profileDataUsecase.execute(loginEmail)?.numberOfRents.toString()) }
+    val uuid by rememberSaveable { mutableStateOf(loginEmail?.let {
+            profileDataUsecase.execute(it)?.uuid.toString()
+    }) }
+    val username by rememberSaveable { mutableStateOf(loginEmail?.let {
+        profileDataUsecase.execute(
+            it
+        )?.username
+    }) }
+    val email by rememberSaveable { mutableStateOf(loginEmail?.let { profileDataUsecase.execute(it)?.email }) }
+    val isRenting by rememberSaveable { mutableStateOf(loginEmail?.let {
+        profileDataUsecase.execute(
+            it
+        )?.isRenting.toString()
+    }) }
+    val scooterRented by rememberSaveable { mutableStateOf(loginEmail?.let {
+        profileDataUsecase.execute(
+            it
+        )?.scooterRented.toString()
+    }) }
+    val creationDate by rememberSaveable { mutableStateOf(loginEmail?.let {
+        profileDataUsecase.execute(
+            it
+        )?.creationDate.toString()
+    }) }
+    val numberOfRents by rememberSaveable { mutableStateOf(loginEmail?.let {
+        profileDataUsecase.execute(
+            it
+        )?.numberOfRents.toString()
+    }) }
 
     val context = LocalContext.current
 
@@ -105,13 +142,15 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(text = "uuid", modifier = Modifier.width(150.dp))
-                TextField(
-                    value = uuid,
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier.width(250.dp)
+                uuid?.let {
+                    TextField(
+                        value = it,
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier.width(250.dp)
 
-                )
+                    )
+                }
             }
             Row (modifier = Modifier
                 .fillMaxWidth()
@@ -151,13 +190,15 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(text = "isRenting", modifier = Modifier.width(150.dp))
-                TextField(
-                    value = isRenting,
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier.width(250.dp)
+                isRenting?.let {
+                    TextField(
+                        value = it,
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier.width(250.dp)
 
-                )
+                    )
+                }
             }
             Row (modifier = Modifier
                 .fillMaxWidth()
@@ -165,13 +206,15 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(text = "scooterRented", modifier = Modifier.width(150.dp))
-                TextField(
-                    value = scooterRented,
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier.width(250.dp)
+                scooterRented?.let {
+                    TextField(
+                        value = it,
+                        onValueChange = {},
+                        readOnly = true,
+                        modifier = Modifier.width(250.dp)
 
-                )
+                    )
+                }
             }
             Row (modifier = Modifier
                 .fillMaxWidth()
@@ -179,13 +222,15 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(text = "creationDate", modifier = Modifier.width(150.dp))
-                TextField(
-                    value = creationDate,
-                    onValueChange = {},
-                    readOnly = true ,
-                    modifier = Modifier.width(250.dp)
+                creationDate?.let {
+                    TextField(
+                        value = it,
+                        onValueChange = {},
+                        readOnly = true ,
+                        modifier = Modifier.width(250.dp)
 
-                )
+                    )
+                }
             }
             Row (modifier = Modifier
                 .fillMaxWidth()
@@ -193,12 +238,14 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(text = "numberOfRents", modifier = Modifier.width(150.dp))
-                TextField(
-                    value = numberOfRents,
-                    onValueChange = {},
-                    readOnly = true ,
-                    modifier = Modifier.width(250.dp)
-                )
+                numberOfRents?.let {
+                    TextField(
+                        value = it,
+                        onValueChange = {},
+                        readOnly = true ,
+                        modifier = Modifier.width(250.dp)
+                    )
+                }
             }
             Row (
 
@@ -208,6 +255,26 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
                     .padding(start = 30.dp, end = 30.dp).padding(vertical = 30.dp),content ={Text(text="Go Back")} ,onClick = {
                     // navigate to login Activity
                     context.startActivity(Intent(context, LoginActivity::class.java))
+                })
+            }
+            Row (
+
+            ){
+                Button( modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 30.dp, end = 30.dp).padding(vertical = 30.dp),content ={Text(text="Scooters")} ,onClick = {
+                    // navigate to ScooterListActivity
+                    context.startActivity(Intent(context, ScooterListActivity::class.java))
+                })
+            }
+            Row (
+
+            ){
+                Button( modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 30.dp, end = 30.dp).padding(vertical = 30.dp),content ={Text(text="Rents")} ,onClick = {
+                    // navigate to ScooterListActivity
+                    context.startActivity(Intent(context, RentListActivity::class.java))
                 })
             }
         }
@@ -220,5 +287,6 @@ fun ProfileScreen(loginEmail:String?,profileDataUsecase: ProfileDataUsecase){
 @Composable
 fun ProfileScreenPreview(){
     val jsonArray:JSONArray?=null
-    ProfileScreen("email",ProfileDataUsecase((UserRepository(UserDao.getInstance(LocalContext.current,jsonArray)))))
+    ProfileScreen("email",ProfileDataUsecase((UserRepository(UserDataSource.getInstance(LocalContext.current),AppDatabase.getDatabase(LocalContext.current).userDataSource(),AppDatabase.getDatabase(LocalContext.current).scooterDataSource())))                    )
+
 }

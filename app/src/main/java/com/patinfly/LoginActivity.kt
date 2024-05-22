@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -28,11 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.patinfly.data.dataSource.user.UserDao
+import com.patinfly.data.dataSource.dbDataSource.AppDatabase
+import com.patinfly.data.dataSource.dbDataSource.UserDao
+import com.patinfly.data.dataSource.user.UserDataSource
 
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.usecase.LoginUsecase
 import com.patinfly.ui.theme.ui.theme.PatinflyTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
@@ -47,7 +53,14 @@ class LoginActivity :ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    UserLoginForm(LoginUsecase((UserRepository(UserDao.getInstance(LocalContext.current,loadJson())))))
+                   //UserLoginForm(LoginUsecase((UserRepository(UserDao.getInstance(LocalContext.current,)))))
+//                    UserLoginForm(LoginUsecase((UserRepository(
+//                        UserDataSource.getInstance(LocalContext.current,AppDatabase.getDatabase(
+//                        LocalContext.current).userDataSource())))))
+//                   ))
+
+                    UserLoginForm(LoginUsecase((UserRepository(UserDataSource.getInstance(LocalContext.current),AppDatabase.getDatabase(LocalContext.current).userDataSource(),AppDatabase.getDatabase(LocalContext.current).scooterDataSource())))                    )
+
                 }
             }
         }
@@ -78,7 +91,7 @@ private fun loadJson():JSONArray?{
 @Composable
 fun UserLoginForm(loginUsecase: LoginUsecase){
     val context = LocalContext.current
-
+    val coroutineScope = rememberCoroutineScope()
     Surface {
         Column (modifier = Modifier.width(300.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
             var email by remember {
@@ -98,22 +111,41 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
             }
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Login")} ,onClick = {
+//                        try {
+//                        Log.e("TAG check","the check result ${loginUsecase.execute(email)}")
+//                        val check =loginUsecase.execute(email)
+//                        if (check=="user approved"){
+//                            // send email to Profile Activity so we can fetch its Info
+//                            val intent = Intent(context, ProfileActivity::class.java)
+//                            intent.putExtra("email",email.text)
+//                            context.startActivity(intent)
+//                        }else{
+//                            // in case of Wrong email we show an error text
+//                            error="Wrong Credentials"
+//                        }
+//                        }catch (error:Exception){
+//                            Log.e("TAG check error","Wrong Credentials")
+//                        }
+                    coroutineScope.launch {withContext(Dispatchers.IO) {
                         try {
-                        Log.e("TAG check","the check result ${loginUsecase.execute(email)}")
-                        val check =loginUsecase.execute(email)
-                        if (check=="user approved"){
-                            // send email to Profile Activity so we can fetch its Info
-                            val intent = Intent(context, ProfileActivity::class.java)
-                            intent.putExtra("email",email.text)
-                            context.startActivity(intent)
-                        }else{
-                            // in case of Wrong email we show an error text
-                            error="Wrong Credentials"
-                        }
+                            val userIsValidated = loginUsecase.execute(email)
+
+                            if (userIsValidated) {
+                                // send email to Profile Activity so we can fetch its Info
+                                val intent = Intent(context, ProfileActivity::class.java)
+                                val sendEmail:String =email.text
+                                intent.putExtra("email",sendEmail)
+                                context.startActivity(intent)
+
+                            }else{
+                                error="Wrong Credentials"
+                                // in case of Wrong email we show an error text
+                            }
                         }catch (error:Exception){
-                            Log.e("TAG check error","Wrong Credentials")
+                            Log.e("TAG check error","TAG check error")
                         }
 
+                    }          }
                 })}
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Register")} ,onClick = {
@@ -123,7 +155,7 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
             }
 
             // implement error text just in case of Wrong email
-            if (error.isNotEmpty()){
+            if (true){
             Row{
                 Text(text = error, modifier = Modifier.width(150.dp))
                 }
@@ -139,6 +171,6 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
 @Preview(showBackground = true)
 @Composable
 fun UserLoginFormPreview(){
-    val jsonArray:JSONArray?=null
-    UserLoginForm(LoginUsecase((UserRepository(UserDao.getInstance(LocalContext.current,jsonArray)))))
+    UserLoginForm(LoginUsecase((UserRepository(UserDataSource.getInstance(LocalContext.current),AppDatabase.getDatabase(LocalContext.current).userDataSource(),AppDatabase.getDatabase(LocalContext.current).scooterDataSource())))                    )
+
 }

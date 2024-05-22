@@ -8,6 +8,6 @@ import java.util.UUID
   val uuid: UUID,
   val scooterUUID: UUID,
   val userUUID: UUID,
-  var startDate: String,
-  var stopDate: String
+  var startDate: Date,
+  var stopDate: Date
  )
