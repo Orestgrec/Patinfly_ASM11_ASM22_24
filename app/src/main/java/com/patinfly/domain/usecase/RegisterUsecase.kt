@@ -13,7 +13,7 @@ class RegisterUsecase(private var userRepository: UserRepository) {
             val uuid = UUID.randomUUID()
             val scooterRented = UUID.randomUUID()
             val creationDate =Date()
-
+            // for github
             val user = User(
                 uuid,
                 username,

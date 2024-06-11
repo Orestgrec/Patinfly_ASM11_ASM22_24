@@ -60,7 +60,6 @@ class RegisterActivity : ComponentActivity() {
  fun UserRegisterForm(registerUsecase: RegisterUsecase){
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-
     Surface {
         Column (modifier = Modifier.width(300.dp), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
             var email by remember {
