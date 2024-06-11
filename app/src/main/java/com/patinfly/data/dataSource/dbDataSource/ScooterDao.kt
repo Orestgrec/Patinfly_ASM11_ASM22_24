@@ -10,9 +10,9 @@ import java.util.UUID
 @Dao
 interface ScooterDao {
     @Insert
-    fun save(scooterEntity: ScooterEntity)
+    suspend fun save(scooterEntity: ScooterEntity)
     @Query("select * from ScooterEntity where uuid = :uuid")
-    fun getScooterByUUID(uuid: UUID): ScooterEntity?
+    suspend fun getScooterByUUID(uuid: UUID): ScooterEntity?
 
     @Query("select * from ScooterEntity")
     suspend fun getAll(): List<ScooterEntity>

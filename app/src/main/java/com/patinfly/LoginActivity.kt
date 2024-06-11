@@ -30,18 +30,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.patinfly.data.dataSource.dbDataSource.AppDatabase
-import com.patinfly.data.dataSource.dbDataSource.UserDao
 import com.patinfly.data.dataSource.user.UserDataSource
-
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.usecase.LoginUsecase
 import com.patinfly.ui.theme.ui.theme.PatinflyTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONArray
-import java.io.InputStream
-import java.nio.charset.StandardCharsets
 
 class LoginActivity :ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,27 +60,6 @@ class LoginActivity :ComponentActivity() {
             }
         }
     }
-
-    // load data from json file in assets and return json Array
-private fun loadJson():JSONArray?{
-   return try {
-    val inputStream:InputStream= assets.open("user.json")
-        val size:Int=inputStream.available()
-        val buffer = ByteArray(size)
-        inputStream.read(buffer)
-        inputStream.close()
-
-
-        val json = String(buffer, StandardCharsets.UTF_8)
-        val jsonArray = JSONArray(json)
-
-       jsonArray
-    }catch (error:Exception){
-        Log.e("TAG","loadJson: error")
-        null
-    }
- }
-
 }
 
 @Composable
@@ -102,33 +76,18 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
             var error by rememberSaveable { mutableStateOf(String())}
 
             Row(modifier = Modifier.padding(vertical = 8.dp)) {
-                TextField(value = email, label = { Text(text="email") } , onValueChange ={email= it}, )
+                TextField(value = email, label = { Text(text="email") } , onValueChange ={email= it} )
             }
             Row (modifier = Modifier.padding(vertical = 8.dp)){
-                TextField(value = password, label = { Text(text="Password") } , onValueChange ={password= it}, )
+                TextField(value = password, label = { Text(text="Password") } , onValueChange ={password= it} )
 
 
             }
             Row{
                 Button(modifier = Modifier.width(200.dp),content ={Text(text="Login")} ,onClick = {
-//                        try {
-//                        Log.e("TAG check","the check result ${loginUsecase.execute(email)}")
-//                        val check =loginUsecase.execute(email)
-//                        if (check=="user approved"){
-//                            // send email to Profile Activity so we can fetch its Info
-//                            val intent = Intent(context, ProfileActivity::class.java)
-//                            intent.putExtra("email",email.text)
-//                            context.startActivity(intent)
-//                        }else{
-//                            // in case of Wrong email we show an error text
-//                            error="Wrong Credentials"
-//                        }
-//                        }catch (error:Exception){
-//                            Log.e("TAG check error","Wrong Credentials")
-//                        }
                     coroutineScope.launch {withContext(Dispatchers.IO) {
                         try {
-                            val userIsValidated = loginUsecase.execute(email)
+                            val userIsValidated = loginUsecase.execute(email,password)
 
                             if (userIsValidated) {
                                 // send email to Profile Activity so we can fetch its Info
@@ -155,11 +114,10 @@ fun UserLoginForm(loginUsecase: LoginUsecase){
             }
 
             // implement error text just in case of Wrong email
-            if (true){
+
             Row{
                 Text(text = error, modifier = Modifier.width(150.dp))
                 }
-            }
             }
 
         }

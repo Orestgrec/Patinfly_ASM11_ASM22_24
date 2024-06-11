@@ -13,8 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.patinfly.presentation.theme.PatinflyTheme
 
 class MainActivity  : ComponentActivity() {
-   private val tag = MainActivity::class.java.simpleName
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

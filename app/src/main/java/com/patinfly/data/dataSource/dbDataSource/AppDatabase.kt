@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.patinfly.data.model.UserModel
 import com.patinfly.domain.model.dbDatasource.RentEntity
 import com.patinfly.domain.model.dbDatasource.ScooterEntity
 import com.patinfly.domain.model.dbDatasource.UserEntity
@@ -25,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "patinfly_24_database"
+                    "patinfly_24_database v6"
                 ).fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

@@ -60,6 +60,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
     implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
@@ -79,6 +81,15 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
 
+    //Retrofit
+    // https://square.github.io/retrofit/
+     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    // Retrofit with Kotlin serialization Converter
+     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
 
 

@@ -17,5 +17,7 @@ data class UserModel(
     @SerializedName("creation_date")
     val creationDate: LocalDateTime?,
     @SerializedName("number_of_rents")
-    val numberOfRents: Int?
-)
+    val numberOfRents: Int?,
+    val password :String,
+
+    )

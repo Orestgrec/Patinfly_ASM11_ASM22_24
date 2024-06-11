@@ -1,25 +1,13 @@
 package com.patinfly.data.repository
 
 import android.util.Log
-import com.patinfly.data.dataSource.dbDataSource.RentDao
 import com.patinfly.data.dataSource.dbDataSource.ScooterDao
 import com.patinfly.data.dataSource.dbDataSource.UserDao
 import com.patinfly.data.dataSource.user.UserDataSource
-import com.patinfly.domain.model.Rent
-import com.patinfly.domain.model.Scooter
 import com.patinfly.domain.model.User
-import com.patinfly.domain.model.dbDatasource.RentEntity
-import com.patinfly.domain.model.dbDatasource.ScooterEntity
 import com.patinfly.domain.model.dbDatasource.UserEntity
-import com.patinfly.domain.model.dbDatasource.toRentDomain
 import com.patinfly.domain.model.dbDatasource.toUserDomain
 import com.patinfly.domain.repository.IUserRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class UserRepository(
@@ -29,65 +17,37 @@ class UserRepository(
 ) : IUserRepository {
 
 
-    private val userMap: MutableMap<UUID, User> = mutableMapOf()
-
-    override  fun fetchUserByEmail(email: String): User? {
+    override suspend fun fetchUserByEmail(email: String): User? {
         return try {
-            runBlocking {
-                val deferred = async(Dispatchers.IO) {
-                    userDao.getUserByMail(email)?.toUserDomain()
-                }
-                deferred.await()
-            }
+            userDao.getUserByMail(email)?.toUserDomain()
+
         } catch (error: Exception) {
-            Log.e("saveRent", "Error in fetching process")
+            Log.e("fetchUserByEmail", "Error in fetching process", error)
             null
         }
     }
-    override fun fetchUserByUUID(uuid: UUID):User?{
+
+    override suspend fun fetchUserByUUID(uuid: UUID): User? {
         return try {
-            runBlocking {
-                val deferred = async(Dispatchers.IO) {
-                    userDao.getUserByUUID(uuid)?.toUserDomain()
-                }
-                deferred.await()
-            }
+                userDao.getUserByUUID(uuid)?.toUserDomain()
+
         } catch (error: Exception) {
-            Log.e("saveRent", "Error in fetching process")
+            Log.e("fetchUserByUUID", "Error in fetching process", error)
             null
         }
-
     }
 
-     override fun checkUserByEmail(email: String): UUID? {
-//         val userByMail:User? = userDao.getUserByMail(email)?.toUserDomain()
-//         return if (userByMail !=null) {
-//             userByMail.uuid
-//         }
-//         else {
-//         //get information from external source (json)
-//         val user = userDataSource.fatchUserByEmail(email)
-//         //add user to DB
-//         user?.let{
-//             GlobalScope.launch(Dispatchers.IO) {
-//                 userDao.save(UserEntity.fromUserDomain(user))
-//             }        }
-//             user?.uuid
-//         }
-         TODO("Not yet implemented")
-    }
-    override fun saveUser(user: User){
+//     override suspend fun checkUserByEmail(email: String): UUID? {
+//    }
+    override suspend fun saveUser(user: User){
         // store the new user`s data in database
         try {
-            GlobalScope.launch(Dispatchers.IO) {
-                userDao.save(UserEntity.fromUserDomain(user))
-            }
+            userDao.save(UserEntity.fromUserDomain(user))
         }catch (error:Exception) {
             Log.e("saveRent","Error in save process")
         }
     }
-     override fun updateUser(user: User){
-         TODO("Not yet implemented")
-    }
+//     override suspend fun updateUser(user: User){
+//    }
 
 }

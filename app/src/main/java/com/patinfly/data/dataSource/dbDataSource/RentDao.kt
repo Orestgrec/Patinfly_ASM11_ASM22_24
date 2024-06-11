@@ -11,15 +11,15 @@ import java.util.UUID
 interface RentDao {
 
     @Insert
-    fun save(rentEntity: RentEntity)
+    suspend fun save(rentEntity: RentEntity)
     @Query("select * from RentEntity where uuid = :uuid")
-    fun getRentByUUID(uuid: UUID): RentEntity?
+    suspend fun getRentByUUID(uuid: UUID): RentEntity?
 
     @Query("select * from RentEntity")
-    fun getAll(): List<RentEntity>
+    suspend fun getAll(): List<RentEntity>
     @Update
-    fun update(rentEntity: RentEntity)
+    suspend fun update(rentEntity: RentEntity)
     @Delete
-    fun delete(rentEntity: RentEntity)
+    suspend fun delete(rentEntity: RentEntity)
 
 }

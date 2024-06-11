@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Patinfly"
         tools:targetApi="31">
+        <activity
+            android:name=".presentation.scooterList.SingleScooterActivity"
+            android:exported="false"
+            android:label="SingleScooterActivity"
+            android:theme="@style/Theme.Patinfly" />
         <activity
             android:name=".presentation.rentList.RentListActivity"
             android:exported="false"

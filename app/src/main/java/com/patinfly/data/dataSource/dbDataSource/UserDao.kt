@@ -14,14 +14,14 @@ interface UserDao {
  @Insert
  suspend fun save(userEntity: UserEntity)
  @Query("select * from UserEntity where uuid = :uuid")
- fun getUserByUUID(uuid: UUID): UserEntity?
+ suspend fun getUserByUUID(uuid: UUID): UserEntity?
  @Query("select * from UserEntity where email = :email")
- fun getUserByMail(email: String): UserEntity?
+ suspend fun getUserByMail(email: String): UserEntity?
  @Query("select * from UserEntity")
- fun getAll(): List<UserEntity>
+ suspend fun getAll(): List<UserEntity>
  @Update
- fun update(userEntity: UserEntity)
+ suspend fun update(userEntity: UserEntity)
  @Delete
- fun delete(userEntity:UserEntity)
+ suspend fun delete(userEntity:UserEntity)
 
  }
