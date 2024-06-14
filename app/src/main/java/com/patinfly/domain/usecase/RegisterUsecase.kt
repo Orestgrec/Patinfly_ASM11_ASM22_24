@@ -3,6 +3,7 @@ package com.patinfly.domain.usecase
 import android.util.Log
 import com.patinfly.data.repository.UserRepository
 import com.patinfly.domain.model.User
+import com.patinfly.utils.PasswordUtils
 import java.util.Date
 import java.util.UUID
 
@@ -13,7 +14,11 @@ class RegisterUsecase(private var userRepository: UserRepository) {
             val uuid = UUID.randomUUID()
             val scooterRented = UUID.randomUUID()
             val creationDate =Date()
-            // for github
+
+             val salt=PasswordUtils.getSalt()
+             val hashedPass= PasswordUtils.hashPassword(password, salt)
+
+
             val user = User(
                 uuid,
                 username,
@@ -22,7 +27,8 @@ class RegisterUsecase(private var userRepository: UserRepository) {
                 scooterRented,
                 creationDate,
                 numberOfRents = 8,
-                password,
+                salt,
+                hashedPass
             )
              userRepository.saveUser(user)
         }catch (error:Exception) {

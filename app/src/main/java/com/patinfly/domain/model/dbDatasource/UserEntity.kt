@@ -14,11 +14,12 @@ data class UserEntity (
     val scooterRented: UUID?,
     val creationDate: String,
     val numberOfRents: Int,
-    val password :String)
+    val salt :String,
+    val hashedPass:String)
 {
     companion object {
         fun fromUserDomain(user: User): UserEntity {
-            return UserEntity(uuid = user.uuid,username = user.username,email = user.email,isRenting = user.isRenting,scooterRented = user.scooterRented,creationDate = user.creationDate.toString(),numberOfRents = user.numberOfRents, password =user.password )        }    } }
+            return UserEntity(uuid = user.uuid,username = user.username,email = user.email,isRenting = user.isRenting,scooterRented = user.scooterRented,creationDate = user.creationDate.toString(),numberOfRents = user.numberOfRents, salt=user.salt, hashedPass = user.hashedPass )        }    } }
 fun UserEntity.toUserDomain(): User{
     return User(
         uuid = uuid,
@@ -28,5 +29,6 @@ fun UserEntity.toUserDomain(): User{
         ,scooterRented = scooterRented
         ,creationDate = Date()
         ,numberOfRents = numberOfRents,
-        password = password
+        salt = salt,
+        hashedPass = hashedPass
     ) }

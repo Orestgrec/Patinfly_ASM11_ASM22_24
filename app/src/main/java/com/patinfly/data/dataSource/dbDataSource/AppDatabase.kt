@@ -24,7 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "patinfly_24_database v6"
+                    "patinfly_24_database v7"
                 ).fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

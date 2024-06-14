@@ -11,5 +11,6 @@ data class User(
     val scooterRented: UUID?,
     val creationDate: Date,
     val numberOfRents: Int,
-    val password :String,
+    val salt :String,
+    val hashedPass:String
 )

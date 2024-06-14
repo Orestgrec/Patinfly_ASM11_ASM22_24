@@ -64,6 +64,7 @@ dependencies {
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     val room_version = "2.6.1"
+
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     // To use Kotlin annotation processing tool (kapt)
@@ -90,8 +91,8 @@ dependencies {
     // Retrofit with Kotlin serialization Converter
      implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
      implementation("com.squareup.okhttp3:okhttp:4.11.0")
-
-
+    // hashing password
+    implementation ("androidx.security:security-crypto:1.1.0-alpha03")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

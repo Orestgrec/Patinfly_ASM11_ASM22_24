@@ -42,6 +42,8 @@ class UserRepository(
     override suspend fun saveUser(user: User){
         // store the new user`s data in database
         try {
+            Log.e("saveRent",user.hashedPass)
+
             userDao.save(UserEntity.fromUserDomain(user))
         }catch (error:Exception) {
             Log.e("saveRent","Error in save process")

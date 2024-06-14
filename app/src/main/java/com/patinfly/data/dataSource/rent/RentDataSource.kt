@@ -23,7 +23,5 @@ class RentDataSource {
                     }
                }
      }
-//     fun saveRent(rent: Rent) {}
-//     fun fetchRents(): List<Rent> {}
-//     fun fetchRentByUUID(uuid: UUID): Rent? {}
+
 }
