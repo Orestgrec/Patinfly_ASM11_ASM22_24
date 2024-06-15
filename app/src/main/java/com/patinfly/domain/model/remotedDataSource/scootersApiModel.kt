@@ -61,23 +61,3 @@ data class ScooterApiModel(
     @SerialName(value = "scooters")
     val scooters:List<ScooterInfo>
 )
-//{
-//    fun toScooterDomain(): ScooterApiModel {
-//        return ScooterApiModel(
-//            scooters = this.scooters.map {
-//                ScooterInfo(
-//                    uuid = it.uuid,
-//                    name = it.name,
-//                    dateCreate = it.dateCreate,
-//                    dateLastMaintenance = it.dateLastMaintenance,
-//                    longitude = it.longitude,
-//                    latitude = it.latitude,
-//                    state = it.state,
-//                    vacant = it.vacant,
-//                    batteryLevel = it.batteryLevel,
-//                    metersUse = it.metersUse
-//                )
-//            }
-//        )
-//    }
-//}

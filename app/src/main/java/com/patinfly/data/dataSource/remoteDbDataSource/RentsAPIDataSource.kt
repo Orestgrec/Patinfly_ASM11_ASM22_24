@@ -2,7 +2,6 @@ package com.patinfly.data.dataSource.remoteDbDataSource
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import com.patinfly.domain.model.remotedDataSource.RentApiModel
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
@@ -40,7 +39,6 @@ class RentsAPIDataSource private constructor() {
 
     suspend fun getRents(): RentApiModel  {
             val rents = retrofit.getRents("cXwoo4aCs8VKooJyX2ddGQF1WLOjdwNpGvbazLVM2AWAJxVuTy23")
-            Log.d("RentsAPIDataSource", "$rents")
             return rents
     }
 }

@@ -9,9 +9,6 @@ import com.patinfly.domain.model.dbDatasource.RentEntity
 import com.patinfly.domain.model.dbDatasource.toRentDomain
 import com.patinfly.domain.model.remotedDataSource.RentApiModel
 import com.patinfly.domain.repository.IRentRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 import java.util.UUID
 
 
@@ -41,13 +38,9 @@ class RentRepository (
 //    }
     override suspend fun fetchRentByUUID(uuid: UUID): Rent?{
         return try {
-            runBlocking {
-                val deferred = async(Dispatchers.IO) {
-                    rentDao.getRentByUUID(uuid)?.toRentDomain()
-                }
-                deferred.await()
+            rentDao.getRentByUUID(uuid)?.toRentDomain()
             }
-        } catch (error: Exception) {
+         catch (error: Exception) {
             Log.e("fetchRent", "Error in fetching process")
             null
         }
@@ -55,12 +48,7 @@ class RentRepository (
 
     override suspend fun rents(): RentApiModel?{
         return try {
-            runBlocking {
-                val deferred = async(Dispatchers.IO) {
-                    rentsAPIDataSource.getRents()
-                }
-                deferred.await()
-            }
+            rentsAPIDataSource.getRents()
         } catch (error: Exception) {
             Log.e("fetch", "Error in fetching rents")
             null

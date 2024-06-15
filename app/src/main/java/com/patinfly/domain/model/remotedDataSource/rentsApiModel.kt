@@ -39,17 +39,3 @@ data class RentApiModel(
     @SerialName(value = "rents")
     val rents:List<RentInfo>
 )
-//{
-//    fun toRentDomain(): RentApiModel {
-//        return RentApiModel(
-//            rents = this.rents.map {
-//                RentInfo(
-//                    uuid = it.uuid,
-//                    scooter = it.scooter ,
-//                    dateStart = it.dateStart,
-//                    dateStop = it.dateStop,
-//                )
-//            }
-//        )
-//    }
-//}
